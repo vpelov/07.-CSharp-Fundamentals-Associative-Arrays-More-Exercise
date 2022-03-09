@@ -89,7 +89,8 @@ namespace P02.Judge
                 {
                     Console.WriteLine($"{contest}: {GetNumberCount(studentData, contest)} participants");
                     recycle.Add(contest);
-                            int count = 1;
+
+                    int count = 1;
 
                     for (int j = 0; j < printList.Count; j++)
                     {
@@ -146,7 +147,7 @@ namespace P02.Judge
 
             int count = 1;
 
-            foreach (var item in printStudentIndividual.OrderByDescending(key => key.Value))
+            foreach (var item in printStudentIndividual.OrderByDescending(key => key.Value).ThenBy(x => x.Key))
             {
                 Console.WriteLine($"{count}. {item.Key} -> {item.Value}");
                 count++;
