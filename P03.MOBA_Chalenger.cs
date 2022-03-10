@@ -56,14 +56,14 @@ namespace P03.MOBA_Chalenger
                                 playersDataList[i].Skill = skill;
                                 isExist = false;
                                 break;
-                            }                            
+                            }
                         }
 
                         if (isExist)
                         {
-                                Players player = new Players(playerName, position, skill);
-                                playersDataList.Add(player);
-                        }                            
+                            Players player = new Players(playerName, position, skill);
+                            playersDataList.Add(player);
+                        }
                     }
                 }
                 else                                        // Read input Data "{player} vs {player}"
@@ -108,15 +108,24 @@ namespace P03.MOBA_Chalenger
             }
 
 
-           
-            
-            // TODO: ORDER AND PRINT !!!
+            Dictionary<string, int> totalSkill = GetTotalSkill(playersDataList);      // Order and Print
+
+            playersDataList = playersDataList.OrderByDescending(x => x.Skill).ThenBy(x => x.Position).ToList();
 
 
-            //foreach (var item in playersDataList)
-            //{
-            //    Console.WriteLine($"{item.PlayerName} - {item.Position} - {item.Skill}");
-            //}
+            foreach (var item in totalSkill)
+            {
+                Console.WriteLine($"{item.Key}: {item.Value} skill");
+
+                foreach (Players player in playersDataList)
+                {
+                    if (item.Key == player.PlayerName)
+                    {
+                        Console.WriteLine($"- {player.Position} <::> {player.Skill}");
+                    }
+                }
+
+            }
 
         }
 
@@ -137,6 +146,28 @@ namespace P03.MOBA_Chalenger
 
             return sum;
         }
+
+        static Dictionary<string, int> GetTotalSkill(List<Players> playersDataList)
+        {
+            Dictionary<string, int> totalSkill = new Dictionary<string, int>();
+
+            foreach (var item in playersDataList)
+            {
+                if (totalSkill.ContainsKey(item.PlayerName))
+                {
+                    totalSkill[item.PlayerName] += item.Skill;
+                }
+                else
+                {
+                    totalSkill.Add(item.PlayerName, item.Skill);
+                }
+            }
+
+            totalSkill = totalSkill.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+
+            return totalSkill;
+        }
+
 
     }
 }
